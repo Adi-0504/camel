@@ -5,12 +5,20 @@ import './index.css'
 import App from './App.jsx'
 import { AppProvider } from './context/AppContext.jsx'
 
-createRoot(document.getElementById('root')).render(
-  <StrictMode>
-    <BrowserRouter basename={import.meta.env.BASE_URL}>
-      <AppProvider>
-        <App />
-      </AppProvider>
-    </BrowserRouter>
-  </StrictMode>,
-)
+const routerBase = import.meta.env.BASE_URL.replace(/\/$/, '')
+const rootElement = document.getElementById('root')
+
+try {
+  createRoot(rootElement).render(
+    <StrictMode>
+      <BrowserRouter basename={routerBase}>
+        <AppProvider>
+          <App />
+        </AppProvider>
+      </BrowserRouter>
+    </StrictMode>,
+  )
+} catch (error) {
+  rootElement.innerHTML = '<main class="boot-error"><h1>Coffee Calendar OS</h1><p>The app could not start. Please refresh this page.</p></main>'
+  console.error(error)
+}
